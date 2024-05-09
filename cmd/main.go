@@ -9,5 +9,5 @@ import (
 func main() {
 	cfg := config.EnvLoad()
 	log.Println(cfg)
-
+	
 }

@@ -22,6 +22,10 @@ type Config struct {
 
 
 func EnvLoad() Config {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error while loadig .env file: %v", err)
+	}
 	env := os.Getenv("ENV")
 	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ldate)
 	log.Printf("ENV is %s", env)
@@ -30,10 +34,6 @@ func EnvLoad() Config {
 		log.Fatal("Failed to read config path")
 	}
 	log.Printf("CONFIG PATH is %s", configPath)
-	err := godotenv.Load(configPath)
-	if err != nil {
-		log.Fatalf("Error while loadig .env file: %v", err)
-	}
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Fatalf("config does not exists: %s", err)
 	}	
