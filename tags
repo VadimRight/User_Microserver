@@ -48,6 +48,7 @@
 !_TAG_ROLE_DESCRIPTION!DTD!parameterEntity	partOfAttDef	/part of attribute definition/
 !_TAG_ROLE_DESCRIPTION!Go!package	imported	/imported package/
 !_TAG_ROLE_DESCRIPTION!Go!unknown	receiverType	/receiver type/
+ConectToDatabase	internal/postgres/postgres.go	/^func ConectToDatabase(){$/;"	f	package:postgres
 Config	internal/config/config.go	/^type Config struct {$/;"	s	package:config
 Database_Name	internal/config/config.go	/^	Database_Name string `env:"POSTGRES_DB"`$/;"	m	struct:config.Config	typeref:typename:string
 Env	internal/config/config.go	/^	Env string `env:"ENV"`$/;"	m	struct:config.Config	typeref:typename:string
@@ -62,3 +63,4 @@ Server_Port	internal/config/config.go	/^	Server_Port string `env: "SERVER_PORT"`
 Timeout	internal/config/config.go	/^	Timeout           time.Duration `env:"TIMEOUT"`$/;"	m	struct:config.Config	typeref:typename:time.Duration
 config	internal/config/config.go	/^package config$/;"	p
 main	cmd/main.go	/^package main$/;"	p
+postgres	internal/postgres/postgres.go	/^package postgres$/;"	p
