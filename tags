@@ -48,4 +48,17 @@
 !_TAG_ROLE_DESCRIPTION!DTD!parameterEntity	partOfAttDef	/part of attribute definition/
 !_TAG_ROLE_DESCRIPTION!Go!package	imported	/imported package/
 !_TAG_ROLE_DESCRIPTION!Go!unknown	receiverType	/receiver type/
+Config	internal/config/config.go	/^type Config struct {$/;"	s	package:config
+Database_Name	internal/config/config.go	/^	Database_Name string `env:"POSTGRES_DB"`$/;"	m	struct:config.Config	typeref:typename:string
+Env	internal/config/config.go	/^	Env string `env:"ENV"`$/;"	m	struct:config.Config	typeref:typename:string
+EnvLoad	internal/config/config.go	/^func EnvLoad() Config {$/;"	f	package:config	typeref:typename:Config
+IdleTimeout	internal/config/config.go	/^	IdleTimeout       time.Duration `env:"IDLE_TIMEOUT"`$/;"	m	struct:config.Config	typeref:typename:time.Duration
+Postgres_Host	internal/config/config.go	/^	Postgres_Host string `env:"POSTGRES_HOST"`$/;"	m	struct:config.Config	typeref:typename:string
+Postgres_Password	internal/config/config.go	/^	Postgres_Password string `env:"POSTGRES_PASSWORD"`$/;"	m	struct:config.Config	typeref:typename:string
+Postgres_Port	internal/config/config.go	/^	Postgres_Port string `env:"POSTGRES_PORT"`$/;"	m	struct:config.Config	typeref:typename:string
+Postgres_User	internal/config/config.go	/^	Postgres_User string `env:"POSTGRES_USER"`$/;"	m	struct:config.Config	typeref:typename:string
+Server_Address	internal/config/config.go	/^	Server_Address string `env: "SERVER_ADDR"`$/;"	m	struct:config.Config	typeref:typename:string
+Server_Port	internal/config/config.go	/^	Server_Port string `env: "SERVER_PORT"`$/;"	m	struct:config.Config	typeref:typename:string
+Timeout	internal/config/config.go	/^	Timeout           time.Duration `env:"TIMEOUT"`$/;"	m	struct:config.Config	typeref:typename:time.Duration
+config	internal/config/config.go	/^package config$/;"	p
 main	cmd/main.go	/^package main$/;"	p
