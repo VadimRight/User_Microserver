@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 	"github.com/joho/godotenv"
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
@@ -23,45 +24,25 @@ type Config struct {
 
 
 func EnvLoad() *Config {
-  log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ldate)
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("err loading: %v", err)
+	}		
+	env := os.Getenv("ENV")
+	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
+	log.Printf("ENV is %s", env)
+	configPath := os.Getenv("CONFIG_PATH")
+	log.Printf("CONFIG_PATH is %s", configPath)
+	if configPath == "" {
+		log.Fatal("CONFIG_PATH is not set")
+	}
 
-  err := godotenv.Load(".env")
-  if err != nil {
-    log.Fatalf("Error while loadig .env file: %v", err)
-  }
-
-  env, ok := os.LookupEnv("ENV")
-  if !ok {
-    log.Fatal("Failed to read ENV")
-  }
-
-  configPath, ok := os.LookupEnv("CONFIG_PATH")
-  if !ok {
-    log.Fatal("Failed to read CONFIG_PATH")
-  }
-
-  _, err = os.Stat(configPath)
-  if os.IsNotExist(err) {
-    log.Fatalf("config does not exists: %s", err)
-  }
-
-  log.Println(configPath)
-
-  postgresPort, ok := os.LookupEnv("POSTGRES_PORT")
-  if !ok {
-    log.Fatal("Failed to read POSTGRES_PORT")
-  }
-
-  return &Config{
-    Postgres_Port:     postgresPort,
-    Postgres_Host:     "",
-    Database_Name:     "",
-    Postgres_User:     "",
-    Postgres_Password: "",
-    Env:               env,
-    Server_Address:    "",
-    Server_Port:       "",
-    Timeout:           0,
-    IdleTimeout:       0,
-  }
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+		log.Fatalf("config file %s does not exists", configPath)
+	}
+	var cfg Config
+	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
+		log.Fatal("cannot read database config")
+	}
+	return &cfg
 }
