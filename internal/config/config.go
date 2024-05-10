@@ -21,7 +21,6 @@ type Config struct {
 	IdleTimeout       time.Duration `env:"IDLE_TIMEOUT"`
 }
 
-
 func EnvLoad() *Config {
 	err := godotenv.Load()
 	if err != nil {

@@ -1,4 +1,4 @@
-package logger
+package slogpretty
 
 import (
 	
@@ -14,7 +14,7 @@ const (
 	envProd  = "prod"
 )
 
-func setupLogger(env string) *slog.Logger {
+func SetupPrettyLogger(env string) *slog.Logger {
 	var log *slog.Logger
 	switch env {
 	case envLocal:
