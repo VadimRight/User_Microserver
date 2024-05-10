@@ -15,8 +15,8 @@ type Config struct {
 	Postgres_User string `env:"POSTGRES_USER"`
 	Postgres_Password string `env:"POSTGRES_PASSWORD"`
 	Env string `env:"ENV"`
-	Server_Address string `env: "SERVER_ADDR"`
-	Server_Port string `env: "SERVER_PORT"`
+	Server_Address string `env:"SERVER_ADDR"`
+	Server_Port string `env:"SERVER_PORT"`
 	Timeout           time.Duration `env:"TIMEOUT"`
 	IdleTimeout       time.Duration `env:"IDLE_TIMEOUT"`
 }
