@@ -8,7 +8,7 @@ import (
 
 func main() {
 	cfg := config.EnvLoad()
-	log := slogpretty.SetupPrettyLogger(cfg.Env)
+	log := logger.SetupPrettyLogger(cfg.Env)
 	log.Info(
 		"starting url-shortener",
 		slog.String("env", cfg.Env),
