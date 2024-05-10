@@ -52,7 +52,7 @@ ConectToDatabase	internal/postgres/postgres.go	/^func ConectToDatabase(){$/;"	f	
 Config	internal/config/config.go	/^type Config struct {$/;"	s	package:config
 Database_Name	internal/config/config.go	/^	Database_Name string `env:"POSTGRES_DB"`$/;"	m	struct:config.Config	typeref:typename:string
 Env	internal/config/config.go	/^	Env string `env:"ENV"`$/;"	m	struct:config.Config	typeref:typename:string
-EnvLoad	internal/config/config.go	/^func EnvLoad() Config {$/;"	f	package:config	typeref:typename:Config
+EnvLoad	internal/config/config.go	/^func EnvLoad() *Config {$/;"	f	package:config	typeref:typename:*Config
 IdleTimeout	internal/config/config.go	/^	IdleTimeout       time.Duration `env:"IDLE_TIMEOUT"`$/;"	m	struct:config.Config	typeref:typename:time.Duration
 Postgres_Host	internal/config/config.go	/^	Postgres_Host string `env:"POSTGRES_HOST"`$/;"	m	struct:config.Config	typeref:typename:string
 Postgres_Password	internal/config/config.go	/^	Postgres_Password string `env:"POSTGRES_PASSWORD"`$/;"	m	struct:config.Config	typeref:typename:string

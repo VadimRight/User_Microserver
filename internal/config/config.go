@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 	"github.com/joho/godotenv"
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
@@ -21,22 +22,25 @@ type Config struct {
 }
 
 
-func EnvLoad() Config {
+func EnvLoad() *Config {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error while loadig .env file: %v", err)
-	}
+		log.Fatalf("err loading: %v", err)
+	}		
 	env := os.Getenv("ENV")
-	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ldate)
+	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
 	log.Printf("ENV is %s", env)
 	configPath := os.Getenv("CONFIG_PATH")
+	log.Printf("CONFIG_PATH is %s", configPath)
 	if configPath == "" {
-		log.Fatal("Failed to read config path")
+		log.Fatal("CONFIG_PATH is not set")
 	}
-	log.Printf("CONFIG PATH is %s", configPath)
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		log.Fatalf("config does not exists: %s", err)
-	}	
+		log.Fatalf("config file %s does not exists", configPath)
+	}
 	var cfg Config
-	return cfg
+	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
+		log.Fatal("cannot read database config")
+	}
+	return &cfg
 }
