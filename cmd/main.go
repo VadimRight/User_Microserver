@@ -20,6 +20,7 @@ func main() {
 		slog.String("Postgres Host", cfg.Postgres_Host),
 		slog.String("Postgres User", cfg.Postgres_User),
 		slog.String("Server Port", cfg.Server_Port),
+		slog.String("Server_Address", cfg.Server_Address),
 		slog.Duration("Timeout", cfg.Timeout),
 		slog.Duration("Idle Timeout", cfg.IdleTimeout),
 	)
