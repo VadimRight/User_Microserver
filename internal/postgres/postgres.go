@@ -3,9 +3,10 @@ package postgres
 import (
 	"database/sql"
 	"github.com/VadimRight/User_Microserver/internal/config"
-	"github.com/VadimRight/User_Microserver/pkg/prettylogger/handler/logger"
+	"log/slog"
 )
 
 func InitPostgresDatabase(cfg *config.Config) error {
-	log := logger.SetupPrettyLogger("host=%s port=%s user=%s password=%s dbname=%s")	
+
+	db, err := sql.Open("postgres", cfg)
 }
