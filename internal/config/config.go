@@ -77,15 +77,6 @@ func LoadPostgresConfig() *PostgresConfig {
 	}
 	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
 	
-	configPath := os.Getenv("CONFIG_PATH")
-	log.Printf("CONFIG_PATH is %s", configPath)
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH is not set")
-	}
-	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		log.Fatalf("config file %s does not exists", configPath)
-	}
-
 	postgresPort, ok := os.LookupEnv("POSTGRES_PORT")
 	if !ok {log.Fatal("Can't read POSTGRES_PORT")}
 
@@ -117,14 +108,6 @@ func LoadServerConfig() *ServerConfig {
 	}
 	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
 	
-	configPath := os.Getenv("CONFIG_PATH")
-	log.Printf("CONFIG_PATH is %s", configPath)
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH is not set")
-	}
-	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		log.Fatalf("config file %s does not exists", configPath)
-	}
 	serverPort, ok := os.LookupEnv("SERVER_PORT")
 	if !ok {
 		log.Fatal("Can't read SERVER_PORT")
