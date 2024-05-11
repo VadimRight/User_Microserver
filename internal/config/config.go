@@ -5,23 +5,32 @@ import (
 	"os"
 	"time"
 	"github.com/joho/godotenv"
-	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
-	Postgres_Port string `env:"POSTGRES_PORT"`
-	Postgres_Host string `env:"POSTGRES_HOST"`
-	Database_Name string `env:"POSTGRES_DB"`
-	Postgres_User string `env:"POSTGRES_USER"`
-	Postgres_Password string `env:"POSTGRES_PASSWORD"`
-	Env string `env:"ENV"`
-	Server_Address string `env:"SERVER_ADDR"`
-	Server_Port string `env:"SERVER_PORT"`
-	Timeout           time.Duration `env:"TIMEOUT"`
-	IdleTimeout       time.Duration `env:"IDLE_TIMEOUT"`
 }
 
-func EnvLoad() *Config {
+type EnvConfig struct {
+	Env string 
+	EnvPath string
+}
+
+type PostgresConfig struct {	
+	Postgres_Port string 
+	Postgres_Host string 
+	Database_Name string 
+	Postgres_User string 
+	Postgres_Password string 
+}
+
+type ServerConfig struct {
+	Server_Address string 
+	Server_Port string 
+	Timeout           time.Duration 
+	IdleTimeout       time.Duration 
+}
+
+func LoadEnvConfig() *EnvConfig {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("err loading: %v", err)
@@ -37,9 +46,77 @@ func EnvLoad() *Config {
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Fatalf("config file %s does not exists", configPath)
 	}
-	var cfg Config
-	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
-		log.Fatal("cannot read database config")
-	}
+	var cfg EnvConfig
 	return &cfg
+}
+
+func LoadPostgresConfig() *PostgresConfig {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("err loading postgres env: %v", err)
+	}
+	postgresPort, ok := os.LookupEnv("POSTGRES_PORT")
+	if !ok {
+		log.Fatal("Can't read POSTGRES_PORT")
+	}
+	postgresHost, ok := os.LookupEnv("POSTGRES_HOST")
+	if !ok {
+		log.Fatal("Can't read POSTGRES_HOST")
+	}
+	postgresPassword, ok := os.LookupEnv("POSTGRES_PASSWORD")
+	if !ok {
+		log.Fatal()
+	}
+	postgresDB, ok := os.LookupEnv("POSTGRES_DB")
+	if !ok {
+		log.Fatal("Can't read POSTGRES_DB")
+	}
+	postgresUser, ok := os.LookupEnv("POSTGRES_USER")
+	if !ok {
+		log.Fatal("Can't read POSTGRES_USER")
+	}
+	return &PostgresConfig {
+		Postgres_Port: postgresPort,
+		Postgres_Host: postgresHost,
+		Database_Name: postgresDB,
+		Postgres_User: postgresUser,
+		Postgres_Password: postgresPassword,	
+	}
+}
+
+func LoadServerConfig() *ServerConfig {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("err while loading server env: %v", err)
+	}
+	serverPort, ok := os.LookupEnv("SERVER_PORT")
+	if !ok {
+		log.Fatal("Can't read SERVER_PORT")
+	}
+	serverAddr, ok := os.LookupEnv("SERVER_ADDR")
+	if !ok {
+		log.Fatal("Can't read SERVER_ADDR")
+	}
+	timeout, ok := os.LookupEnv("TIMEOUT")
+	if !ok {
+		log.Fatal("Can't read TIMEOUT")
+	}
+	timeoutTime, err := time.ParseDuration(timeout)
+	if err != nil {
+		log.Fatalf("error while parsing timeout")
+	}
+	idleTimeout, ok := os.LookupEnv("IDLE_TIMEOUT")
+	if !ok {
+		log.Fatal("Can't read IDLE_TIMEOUT")
+	}
+	idleTimeoutTime, err := time.ParseDuration(idleTimeout)
+	if err != nil {
+		log.Fatalf("error while parsing idle time")
+	}
+	return &ServerConfig {
+		Server_Address: serverAddr, 
+		Server_Port: serverPort,
+		Timeout: timeoutTime, 
+		IdleTimeout: idleTimeoutTime,  	
+	}
 }

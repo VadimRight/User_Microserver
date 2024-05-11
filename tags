@@ -49,36 +49,43 @@
 !_TAG_ROLE_DESCRIPTION!Go!package	imported	/imported package/
 !_TAG_ROLE_DESCRIPTION!Go!unknown	receiverType	/receiver type/
 Config	internal/config/config.go	/^type Config struct {$/;"	s	package:config
-Database_Name	internal/config/config.go	/^	Database_Name string `env:"POSTGRES_DB"`$/;"	m	struct:config.Config	typeref:typename:string
-Env	internal/config/config.go	/^	Env string `env:"ENV"`$/;"	m	struct:config.Config	typeref:typename:string
-EnvLoad	internal/config/config.go	/^func EnvLoad() *Config {$/;"	f	package:config	typeref:typename:*Config
-IdleTimeout	internal/config/config.go	/^	IdleTimeout       time.Duration `env:"IDLE_TIMEOUT"`$/;"	m	struct:config.Config	typeref:typename:time.Duration
-Postgres_Host	internal/config/config.go	/^	Postgres_Host string `env:"POSTGRES_HOST"`$/;"	m	struct:config.Config	typeref:typename:string
-Postgres_Password	internal/config/config.go	/^	Postgres_Password string `env:"POSTGRES_PASSWORD"`$/;"	m	struct:config.Config	typeref:typename:string
-Postgres_Port	internal/config/config.go	/^	Postgres_Port string `env:"POSTGRES_PORT"`$/;"	m	struct:config.Config	typeref:typename:string
-Postgres_User	internal/config/config.go	/^	Postgres_User string `env:"POSTGRES_USER"`$/;"	m	struct:config.Config	typeref:typename:string
-Server_Address	internal/config/config.go	/^	Server_Address string `env:"SERVER_ADDR"`$/;"	m	struct:config.Config	typeref:typename:string
-Server_Port	internal/config/config.go	/^	Server_Port string `env:"SERVER_PORT"`$/;"	m	struct:config.Config	typeref:typename:string
+Database_Name	internal/config/config.go	/^	Database_Name string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
+Env	internal/config/config.go	/^	Env string $/;"	m	struct:config.EnvConfig	typeref:typename:string
+EnvConfig	internal/config/config.go	/^type EnvConfig struct {$/;"	s	package:config
+EnvPath	internal/config/config.go	/^	EnvPath string$/;"	m	struct:config.EnvConfig	typeref:typename:string
+Handle	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^func (h *PrettyHandler) Handle(_ context.Context, r slog.Record) error {$/;"	f	struct:slogpretty.PrettyHandler	typeref:typename:error
+Handler	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^	slog.Handler$/;"	M	struct:slogpretty.PrettyHandler	typeref:typename:slog.Handler
+IdleTimeout	internal/config/config.go	/^	IdleTimeout       time.Duration $/;"	m	struct:config.ServerConfig	typeref:typename:time.Duration
+LoadEnvConfig	internal/config/config.go	/^func LoadEnvConfig() *EnvConfig {$/;"	f	package:config	typeref:typename:*EnvConfig
+LoadPostgresConfig	internal/config/config.go	/^func LoadPostgresConfig() *PostgresConfig {$/;"	f	package:config	typeref:typename:*PostgresConfig
+LoadServerConfig	internal/config/config.go	/^func LoadServerConfig() *ServerConfig {$/;"	f	package:config	typeref:typename:*ServerConfig
+NewPrettyHandler	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^func (opts PrettyHandlerOptions) NewPrettyHandler($/;"	f	struct:slogpretty.PrettyHandlerOptions	typeref:typename:*PrettyHandler
+PostgresConfig	internal/config/config.go	/^type PostgresConfig struct {	$/;"	s	package:config
+Postgres_Host	internal/config/config.go	/^	Postgres_Host string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
+Postgres_Password	internal/config/config.go	/^	Postgres_Password string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
+Postgres_Port	internal/config/config.go	/^	Postgres_Port string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
+Postgres_User	internal/config/config.go	/^	Postgres_User string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
+PrettyHandler	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^type PrettyHandler struct {$/;"	s	package:slogpretty
+PrettyHandlerOptions	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^type PrettyHandlerOptions struct {$/;"	s	package:slogpretty
+ServerConfig	internal/config/config.go	/^type ServerConfig struct {$/;"	s	package:config
+Server_Address	internal/config/config.go	/^	Server_Address string $/;"	m	struct:config.ServerConfig	typeref:typename:string
+Server_Port	internal/config/config.go	/^	Server_Port string $/;"	m	struct:config.ServerConfig	typeref:typename:string
 SetupPrettyLogger	pkg/prettylogger/handler/logger/logger.go	/^func SetupPrettyLogger(env string) *slog.Logger {$/;"	f	package:slogpretty	typeref:typename:*slog.Logger
-Timeout	internal/config/config.go	/^	Timeout           time.Duration `env:"TIMEOUT"`$/;"	m	struct:config.Config	typeref:typename:time.Duration
+SlogOpts	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^	SlogOpts *slog.HandlerOptions $/;"	m	struct:slogpretty.PrettyHandlerOptions	typeref:typename:*slog.HandlerOptions
+Timeout	internal/config/config.go	/^	Timeout           time.Duration $/;"	m	struct:config.ServerConfig	typeref:typename:time.Duration
+WithAttrs	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^func (h *PrettyHandler) WithAttrs(attrs []slog.Attr) slog.Handler {$/;"	f	struct:slogpretty.PrettyHandler	typeref:typename:slog.Handler
+WithGroup	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^func (h *PrettyHandler) WithGroup(name string) slog.Handler {$/;"	f	struct:slogpretty.PrettyHandler	typeref:typename:slog.Handler
+attrs	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^	attrs []slog.Attr$/;"	m	struct:slogpretty.PrettyHandler	typeref:typename:[]slog.Attr
 config	internal/config/config.go	/^package config$/;"	p
 envDev	pkg/prettylogger/handler/logger/logger.go	/^	envDev   = "dev"$/;"	c	package:slogpretty
-envDev	pkg/prettylogger/logger.go	/^	envDev   = "dev"$/;"	c	package:slogpretty
-envDev	pkg/prettylogger/logger/logger.go	/^	envDev   = "dev"$/;"	c	package:logger
 envLocal	pkg/prettylogger/handler/logger/logger.go	/^	envLocal = "local"$/;"	c	package:slogpretty
-envLocal	pkg/prettylogger/logger.go	/^	envLocal = "local"$/;"	c	package:slogpretty
-envLocal	pkg/prettylogger/logger/logger.go	/^	envLocal = "local"$/;"	c	package:logger
 envProd	pkg/prettylogger/handler/logger/logger.go	/^	envProd  = "prod"$/;"	c	package:slogpretty
-envProd	pkg/prettylogger/logger.go	/^	envProd  = "prod"$/;"	c	package:slogpretty
-envProd	pkg/prettylogger/logger/logger.go	/^	envProd  = "prod"$/;"	c	package:logger
-logger	pkg/prettylogger/logger/logger.go	/^package logger$/;"	p
+l	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^	l     *stdLog.Logger$/;"	m	struct:slogpretty.PrettyHandler	typeref:typename:*stdLog.Logger
 main	cmd/main.go	/^func main() {$/;"	f	package:main
 main	cmd/main.go	/^package main$/;"	p
+opts	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^	opts PrettyHandlerOptions$/;"	m	struct:slogpretty.PrettyHandler	typeref:typename:PrettyHandlerOptions
 postgres	internal/postgres/postgres.go	/^package postgres$/;"	p
-setupPrettyLogger	pkg/prettylogger/logger.go	/^func setupPrettyLogger(env string) *slog.Logger {$/;"	f	package:slogpretty	typeref:typename:*slog.Logger
-setupPrettyLogger	pkg/prettylogger/logger/logger.go	/^func setupPrettyLogger(env string) *slog.Logger {$/;"	f	package:logger	typeref:typename:*slog.Logger
 setupPrettySlog	pkg/prettylogger/handler/logger/logger.go	/^func setupPrettySlog() *slog.Logger {$/;"	f	package:slogpretty	typeref:typename:*slog.Logger
-setupPrettySlog	pkg/prettylogger/logger.go	/^func setupPrettySlog() *slog.Logger {$/;"	f	package:slogpretty	typeref:typename:*slog.Logger
-setupPrettySlog	pkg/prettylogger/logger/logger.go	/^func setupPrettySlog() *slog.Logger {$/;"	f	package:logger	typeref:typename:*slog.Logger
 slogpretty	pkg/prettylogger/handler/logger/logger.go	/^package slogpretty$/;"	p
-slogpretty	pkg/prettylogger/logger.go	/^package slogpretty$/;"	p
+slogpretty	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^package slogpretty$/;"	p
+stdLog	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^	stdLog "log"$/;"	P	package:log
