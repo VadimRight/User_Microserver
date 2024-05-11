@@ -8,9 +8,9 @@ import (
 )
 
 type Config struct {
-	Env EnvConfig
-	Postgres PostgresConfig
-	Server ServerConfig
+	Env *EnvConfig
+	Postgres *PostgresConfig
+	Server *ServerConfig
 }
 
 type EnvConfig struct {
@@ -33,6 +33,16 @@ type ServerConfig struct {
 	IdleTimeout       time.Duration 
 }
 
+func LoadConfig() *Config {
+	envConfig := LoadEnvConfig()
+	postgresConfig := LoadPostgresConfig()
+	serverConfig := LoadServerConfig()
+	return &Config {
+		Env: envConfig,
+		Postgres: postgresConfig,
+		Server: serverConfig,
+	}	
+}
 
 func LoadEnvConfig() *EnvConfig {
 	err := godotenv.Load()
