@@ -50,6 +50,7 @@
 !_TAG_ROLE_DESCRIPTION!Go!unknown	receiverType	/receiver type/
 Config	internal/config/config.go	/^type Config struct {$/;"	s	package:config
 Database_Name	internal/config/config.go	/^	Database_Name string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
+Env	internal/config/config.go	/^	Env EnvConfig$/;"	m	struct:config.Config	typeref:typename:EnvConfig
 Env	internal/config/config.go	/^	Env string $/;"	m	struct:config.EnvConfig	typeref:typename:string
 EnvConfig	internal/config/config.go	/^type EnvConfig struct {$/;"	s	package:config
 EnvPath	internal/config/config.go	/^	EnvPath string$/;"	m	struct:config.EnvConfig	typeref:typename:string
@@ -60,6 +61,7 @@ LoadEnvConfig	internal/config/config.go	/^func LoadEnvConfig() *EnvConfig {$/;"	
 LoadPostgresConfig	internal/config/config.go	/^func LoadPostgresConfig() *PostgresConfig {$/;"	f	package:config	typeref:typename:*PostgresConfig
 LoadServerConfig	internal/config/config.go	/^func LoadServerConfig() *ServerConfig {$/;"	f	package:config	typeref:typename:*ServerConfig
 NewPrettyHandler	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^func (opts PrettyHandlerOptions) NewPrettyHandler($/;"	f	struct:slogpretty.PrettyHandlerOptions	typeref:typename:*PrettyHandler
+Postgres	internal/config/config.go	/^	Postgres PostgresConfig$/;"	m	struct:config.Config	typeref:typename:PostgresConfig
 PostgresConfig	internal/config/config.go	/^type PostgresConfig struct {	$/;"	s	package:config
 Postgres_Host	internal/config/config.go	/^	Postgres_Host string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
 Postgres_Password	internal/config/config.go	/^	Postgres_Password string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
@@ -67,6 +69,7 @@ Postgres_Port	internal/config/config.go	/^	Postgres_Port string $/;"	m	struct:co
 Postgres_User	internal/config/config.go	/^	Postgres_User string $/;"	m	struct:config.PostgresConfig	typeref:typename:string
 PrettyHandler	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^type PrettyHandler struct {$/;"	s	package:slogpretty
 PrettyHandlerOptions	pkg/prettylogger/handler/slogpretty/slogpretty.go	/^type PrettyHandlerOptions struct {$/;"	s	package:slogpretty
+Server	internal/config/config.go	/^	Server ServerConfig$/;"	m	struct:config.Config	typeref:typename:ServerConfig
 ServerConfig	internal/config/config.go	/^type ServerConfig struct {$/;"	s	package:config
 Server_Address	internal/config/config.go	/^	Server_Address string $/;"	m	struct:config.ServerConfig	typeref:typename:string
 Server_Port	internal/config/config.go	/^	Server_Port string $/;"	m	struct:config.ServerConfig	typeref:typename:string

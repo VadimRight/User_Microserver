@@ -8,6 +8,9 @@ import (
 )
 
 type Config struct {
+	Env EnvConfig
+	Postgres PostgresConfig
+	Server ServerConfig
 }
 
 type EnvConfig struct {
@@ -30,14 +33,14 @@ type ServerConfig struct {
 	IdleTimeout       time.Duration 
 }
 
+
 func LoadEnvConfig() *EnvConfig {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("err loading: %v", err)
 	}		
-	env := os.Getenv("ENV")
+
 	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
-	log.Printf("ENV is %s", env)
 	configPath := os.Getenv("CONFIG_PATH")
 	log.Printf("CONFIG_PATH is %s", configPath)
 	if configPath == "" {
@@ -46,8 +49,15 @@ func LoadEnvConfig() *EnvConfig {
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Fatalf("config file %s does not exists", configPath)
 	}
-	var cfg EnvConfig
-	return &cfg
+
+	envType, ok := os.LookupEnv("ENV")
+	if !ok {
+		log.Fatal("Can't read ENV")
+	}
+	return &EnvConfig {
+		Env: envType, 
+		EnvPath: configPath,
+	}
 }
 
 func LoadPostgresConfig() *PostgresConfig {
@@ -55,26 +65,32 @@ func LoadPostgresConfig() *PostgresConfig {
 	if err != nil {
 		log.Fatalf("err loading postgres env: %v", err)
 	}
+	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
+	
+	configPath := os.Getenv("CONFIG_PATH")
+	log.Printf("CONFIG_PATH is %s", configPath)
+	if configPath == "" {
+		log.Fatal("CONFIG_PATH is not set")
+	}
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+		log.Fatalf("config file %s does not exists", configPath)
+	}
+
 	postgresPort, ok := os.LookupEnv("POSTGRES_PORT")
-	if !ok {
-		log.Fatal("Can't read POSTGRES_PORT")
-	}
+	if !ok {log.Fatal("Can't read POSTGRES_PORT")}
+
 	postgresHost, ok := os.LookupEnv("POSTGRES_HOST")
-	if !ok {
-		log.Fatal("Can't read POSTGRES_HOST")
-	}
+	if !ok {log.Fatal("Can't read POSTGRES_HOST")}
+
 	postgresPassword, ok := os.LookupEnv("POSTGRES_PASSWORD")
-	if !ok {
-		log.Fatal()
-	}
+	if !ok {log.Fatal("Can't read POSTGRES_PASSWORD")}
+
 	postgresDB, ok := os.LookupEnv("POSTGRES_DB")
-	if !ok {
-		log.Fatal("Can't read POSTGRES_DB")
-	}
+	if !ok {log.Fatal("Can't read POSTGRES_DB")}
+	
 	postgresUser, ok := os.LookupEnv("POSTGRES_USER")
-	if !ok {
-		log.Fatal("Can't read POSTGRES_USER")
-	}
+	if !ok {log.Fatal("Can't read POSTGRES_USER")}
+	
 	return &PostgresConfig {
 		Postgres_Port: postgresPort,
 		Postgres_Host: postgresHost,
@@ -88,6 +104,16 @@ func LoadServerConfig() *ServerConfig {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("err while loading server env: %v", err)
+	}
+	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
+	
+	configPath := os.Getenv("CONFIG_PATH")
+	log.Printf("CONFIG_PATH is %s", configPath)
+	if configPath == "" {
+		log.Fatal("CONFIG_PATH is not set")
+	}
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+		log.Fatalf("config file %s does not exists", configPath)
 	}
 	serverPort, ok := os.LookupEnv("SERVER_PORT")
 	if !ok {
