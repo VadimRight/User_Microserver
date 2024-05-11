@@ -7,21 +7,21 @@ import (
 )
 
 func main() {
-	cfg := config.EnvLoad()
-	log := logger.SetupPrettyLogger(cfg.Env)
+	cfg := config.LoadConfig()
+	log := logger.SetupPrettyLogger(cfg.Env.Env)
 	log.Info(
 		"starting url-shortener",
-		slog.String("env", cfg.Env),
+		slog.String("env", cfg.Env.Env),
 	)
 	log.Info(
 		"this is log",
-		slog.String("Postgres Name", cfg.Database_Name),
-		slog.String("Postgres Port", cfg.Postgres_Port),
-		slog.String("Postgres Host", cfg.Postgres_Host),
-		slog.String("Postgres User", cfg.Postgres_User),
-		slog.String("Server Port", cfg.Server_Port),
-		slog.String("Server_Address", cfg.Server_Address),
-		slog.Duration("Timeout", cfg.Timeout),
-		slog.Duration("Idle Timeout", cfg.IdleTimeout),
+		slog.String("Postgres Name", cfg.Postgres.Database_Name),
+		slog.String("Postgres Port", cfg.Postgres.Postgres_Port),
+		slog.String("Postgres Host", cfg.Postgres.Postgres_Host),
+		slog.String("Postgres User", cfg.Postgres.Postgres_User),
+		slog.String("Server Port", cfg.Server.Server_Port),
+		slog.String("Server_Address", cfg.Server.Server_Address),
+		slog.Duration("Timeout", cfg.Server.Timeout),
+		slog.Duration("Idle Timeout", cfg.Server.IdleTimeout),
 	)
 }
