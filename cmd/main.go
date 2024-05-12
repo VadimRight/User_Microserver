@@ -28,5 +28,5 @@ func main() {
 		slog.Duration("Timeout", cfg.Server.Timeout),
 		slog.Duration("Idle Timeout", cfg.Server.IdleTimeout),
 	)
-	log.Printf("Database is %v", database)	
+	log.Printf("Database is initialized in %v", database)	
 }
