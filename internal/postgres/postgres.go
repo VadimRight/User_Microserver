@@ -2,10 +2,12 @@ package postgres
 
 import (
 	"database/sql"
-	"github.com/VadimRight/User_Microserver/internal/config"
 	"fmt"
 	"log"
-	_ "github.com/lib/pq"
+
+	"github.com/VadimRight/User_Microserver/internal/config"
+	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 type PostgresStorage struct {
@@ -17,6 +19,7 @@ var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s ssl
 
 
 func InitPostgresDatabase() *PostgresStorage {
+	const op = "postgres.InitPostgresDatabase"
 	db, err := sql.Open("postgres", postgresUrl)
 	if err != nil {
 		log.Fatalf("Error while connecting to postgres database: %v", err)	
@@ -32,12 +35,37 @@ func InitPostgresDatabase() *PostgresStorage {
 		is_activate BOOL NOT NULL DEFAULT false
 	);`)
 	if err != nil {
-		log.Fatalf("Error while creating user table: %v", err)
+		log.Fatalf("%s: %v", op, err)
 	}
 	_, err = createDatabase.Exec()
 	if err != nil {
-		log.Fatalf("Error while executing CREATE query: %v", err)
+		log.Fatalf("%s: %v", op, err)
 	}
 	defer db.Close()
 	return &PostgresStorage{db: db}
+}
+
+func SaveNewUser(username, email, password string) {
+	const op = "postgres.SaveNewUser"
+	db, err := sql.Open("postgres", postgresUrl)
+	if err != nil {
+		log.Fatalf("%s: %v", op, err)
+	}
+	uuidUserId := uuid.New()
+	createNewUser, err := db.Prepare(`
+	INSERT INTO "user" (id, username, email, password, is_verified, is_activate)
+	VALUE (?, ?, ?, ?);`)
+	if err != nil {
+		log.Fatalf("%s: %v", op, err)
+	}
+	res, err := createNewUser.Exec(uuidUserId, username, email, password)
+	if err != nil {
+		if postgresErr, ok := err.(*pq.Error); ok {
+    			fmt.Println("pq error:", postgresErr.Code.Name())
+		}				
+	}
+	_, err = res.LastInsertId()
+	if err != nil {
+		log.Fatalf("%s failed to get last inserted id: %v", op, err)
+	}
 }
