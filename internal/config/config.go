@@ -31,7 +31,7 @@ type ServerConfig struct {
 	ServerPort string 
 	Timeout           time.Duration 
 	IdleTimeout       time.Duration 
-	ServerRunMode string
+	RunMode string
 }
 
 func LoadConfig() *Config {
@@ -142,6 +142,6 @@ func LoadServerConfig() *ServerConfig {
 		ServerPort: serverPort,
 		Timeout: timeoutTime, 
 		IdleTimeout: idleTimeoutTime,  	
-		ServerRunMode: serverRunMode,
+		RunMode: serverRunMode,
 	}
 }
