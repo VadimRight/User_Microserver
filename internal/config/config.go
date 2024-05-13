@@ -1,6 +1,8 @@
 package config
 
 import (
+	"log/slog"
+	"github.com/VadimRight/User_Microserver/pkg/prettylogger/handler/logger"
 	"log"
 	"os"
 	"time"
@@ -37,7 +39,24 @@ type ServerConfig struct {
 func LoadConfig() *Config {
 	envConfig := LoadEnvConfig()
 	postgresConfig := LoadPostgresConfig()
-	serverConfig := LoadServerConfig()
+	serverConfig := LoadServerConfig()	
+	logPretty := logger.SetupPrettyLogger(envConfig.Env)
+
+	logPretty.Info(
+		"starting url-shortener",
+		slog.String("env", envConfig.Env),
+	)
+	logPretty.Info(
+		"this is log",
+		slog.String("Postgres Name", postgresConfig.DatabaseName),
+		slog.String("Postgres Port", postgresConfig.PostgresPort),
+		slog.String("Postgres Host", postgresConfig.PostgresHost),
+		slog.String("Postgres User", postgresConfig.PostgresUser),
+		slog.String("Server Port", serverConfig.ServerPort),
+		slog.String("Server_Address", serverConfig.ServerAddress),
+		slog.Duration("Timeout", serverConfig.Timeout),
+		slog.Duration("Idle Timeout", serverConfig.IdleTimeout),
+	)
 	return &Config {
 		Env: envConfig,
 		Postgres: postgresConfig,
@@ -110,33 +129,26 @@ func LoadServerConfig() *ServerConfig {
 	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
 	
 	serverPort, ok := os.LookupEnv("SERVER_PORT")
-	if !ok {
-		log.Fatal("Can't read SERVER_PORT")
-	}
+	if !ok {log.Fatal("Can't read SERVER_PORT")}
+	
 	serverAddr, ok := os.LookupEnv("SERVER_ADDR")
-	if !ok {
-		log.Fatal("Can't read SERVER_ADDR")
-	}
+	if !ok {log.Fatal("Can't read SERVER_ADDR")}
+	
 	timeout, ok := os.LookupEnv("TIMEOUT")
-	if !ok {
-		log.Fatal("Can't read TIMEOUT")
-	}
+	if !ok {log.Fatal("Can't read TIMEOUT")}
+	
 	timeoutTime, err := time.ParseDuration(timeout)
-	if err != nil {
-		log.Fatalf("error while parsing timeout")
-	}
+	if err != nil {log.Fatalf("error while parsing timeout")}
+	
 	idleTimeout, ok := os.LookupEnv("IDLE_TIMEOUT")
-	if !ok {
-		log.Fatal("Can't read IDLE_TIMEOUT")
-	}
+	if !ok {log.Fatal("Can't read IDLE_TIMEOUT")}
+	
 	idleTimeoutTime, err := time.ParseDuration(idleTimeout)
-	if err != nil {
-		log.Fatalf("error while parsing idle time")
-	}
+	if err != nil {	log.Fatalf("error while parsing idle time")}
+	
 	serverRunMode, ok := os.LookupEnv("SERVER_RUN_MODE")
-	if !ok{
-		log.Fatalf("err while parsing run mode")
-	}
+	if !ok{	log.Fatalf("err while parsing run mode")}
+	
 	return &ServerConfig {
 		ServerAddress: serverAddr, 
 		ServerPort: serverPort,
