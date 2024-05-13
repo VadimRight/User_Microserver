@@ -7,6 +7,7 @@ import (
 	"github.com/VadimRight/User_Microserver/pkg/prettylogger/handler/logger"
 	"github.com/VadimRight/User_Microserver/internal/config"
 	"github.com/VadimRight/User_Microserver/internal/postgres"
+	"github.com/VadimRight/User_Microserver/api"
 )
 
 func main() {
@@ -29,4 +30,5 @@ func main() {
 		slog.Duration("Idle Timeout", cfg.Server.IdleTimeout),
 	)
 	log.Printf("Database is initialized in %v", database)	
+	api.InitServer(cfg)
 }
