@@ -27,8 +27,8 @@ type PostgresConfig struct {
 }
 
 type ServerConfig struct {
-	Server_Address string 
-	Server_Port string 
+	ServerAddress string 
+	ServerPort string 
 	Timeout           time.Duration 
 	IdleTimeout       time.Duration 
 	ServerRunMode string
@@ -138,8 +138,8 @@ func LoadServerConfig() *ServerConfig {
 		log.Fatalf("err while parsing run mode")
 	}
 	return &ServerConfig {
-		Server_Address: serverAddr, 
-		Server_Port: serverPort,
+		ServerAddress: serverAddr, 
+		ServerPort: serverPort,
 		Timeout: timeoutTime, 
 		IdleTimeout: idleTimeoutTime,  	
 		ServerRunMode: serverRunMode,
