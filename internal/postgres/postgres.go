@@ -15,7 +15,7 @@ type PostgresStorage struct {
 }
 
 var postgresCfg = config.LoadPostgresConfig()
-var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",postgresCfg.Postgres_Host, postgresCfg.Postgres_Port, postgresCfg.Postgres_User, postgresCfg.Postgres_Password, postgresCfg.Database_Name)	
+var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",postgresCfg.PostgresHost, postgresCfg.PostgresPort, postgresCfg.PostgresUser, postgresCfg.PostgresPassword, postgresCfg.DatabaseName)	
 
 
 func InitPostgresDatabase() *PostgresStorage {
