@@ -19,11 +19,11 @@ type EnvConfig struct {
 }
 
 type PostgresConfig struct {	
-	Postgres_Port string 
-	Postgres_Host string 
-	Database_Name string 
-	Postgres_User string 
-	Postgres_Password string 
+	PostgresPort string 
+	PostgresHost string 
+	DatabaseName string 
+	PostgresUser string 
+	PostgresPassword string 
 }
 
 type ServerConfig struct {
@@ -94,11 +94,11 @@ func LoadPostgresConfig() *PostgresConfig {
 	if !ok {log.Fatal("Can't read POSTGRES_USER")}
 	
 	return &PostgresConfig {
-		Postgres_Port: postgresPort,
-		Postgres_Host: postgresHost,
-		Database_Name: postgresDB,
-		Postgres_User: postgresUser,
-		Postgres_Password: postgresPassword,	
+		PostgresPort: postgresPort,
+		PostgresHost: postgresHost,
+		DatabaseName: postgresDB,
+		PostgresUser: postgresUser,
+		PostgresPassword: postgresPassword,	
 	}
 }
 
