@@ -31,6 +31,7 @@ type ServerConfig struct {
 	Server_Port string 
 	Timeout           time.Duration 
 	IdleTimeout       time.Duration 
+	ServerRunMode string
 }
 
 func LoadConfig() *Config {
@@ -132,10 +133,15 @@ func LoadServerConfig() *ServerConfig {
 	if err != nil {
 		log.Fatalf("error while parsing idle time")
 	}
+	serverRunMode, ok := os.LookupEnv("SERVER_RUN_MODE")
+	if !ok{
+		log.Fatalf("err while parsing run mode")
+	}
 	return &ServerConfig {
 		Server_Address: serverAddr, 
 		Server_Port: serverPort,
 		Timeout: timeoutTime, 
 		IdleTimeout: idleTimeoutTime,  	
+		ServerRunMode: serverRunMode,
 	}
 }
