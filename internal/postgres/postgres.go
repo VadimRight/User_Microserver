@@ -69,3 +69,23 @@ func SaveNewUser(username, email, password string) {
 		log.Fatalf("%s failed to get last inserted id: %v", op, err)
 	}
 }
+
+func GetUser(username string) {
+	const op = "postgres.GetUser"
+	db, err := sql.Open("postgres", postgresUrl)
+	if err != nil {
+		log.Fatalf("%s: %v", op, err)
+	}
+	getUser, err := db.Prepare(`
+		SELECT id, username, email, is_verified, is_activate FROM "user" WHERE id = ?;
+	`)
+	if err != nil {
+		log.Fatalf("%s: %v", op, err)
+	}
+	_, err = getUser.Exec(username)
+	if err != nil {
+		if postgresErr, ok := err.(*pq.Error); ok {
+    			fmt.Println("pq error:", postgresErr.Code.Name())
+		}				
+	}
+}
