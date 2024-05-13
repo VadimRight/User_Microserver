@@ -2,7 +2,6 @@ package main
 
 
 import (
-	"log"
 	"github.com/VadimRight/User_Microserver/internal/config"
 	"github.com/VadimRight/User_Microserver/internal/postgres"
 	"github.com/VadimRight/User_Microserver/api"
@@ -10,7 +9,6 @@ import (
 
 func main() {
 	cfg := config.LoadConfig()
-	database := postgres.InitPostgresDatabase()
-	log.Printf("Database is initialized in %v", database)	
+	_ = postgres.InitPostgresDatabase()
 	api.InitServer(cfg)
 }
