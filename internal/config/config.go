@@ -19,16 +19,16 @@ type EnvConfig struct {
 }
 
 type PostgresConfig struct {	
-	Postgres_Port string 
-	Postgres_Host string 
-	Database_Name string 
-	Postgres_User string 
-	Postgres_Password string 
+	PostgresPort string 
+	PostgresHost string 
+	DatabaseName string 
+	PostgresUser string 
+	PostgresPassword string 
 }
 
 type ServerConfig struct {
-	Server_Address string 
-	Server_Port string 
+	ServerAddress string 
+	ServerPort string 
 	Timeout           time.Duration 
 	IdleTimeout       time.Duration 
 	ServerRunMode string
@@ -94,11 +94,11 @@ func LoadPostgresConfig() *PostgresConfig {
 	if !ok {log.Fatal("Can't read POSTGRES_USER")}
 	
 	return &PostgresConfig {
-		Postgres_Port: postgresPort,
-		Postgres_Host: postgresHost,
-		Database_Name: postgresDB,
-		Postgres_User: postgresUser,
-		Postgres_Password: postgresPassword,	
+		PostgresPort: postgresPort,
+		PostgresHost: postgresHost,
+		DatabaseName: postgresDB,
+		PostgresUser: postgresUser,
+		PostgresPassword: postgresPassword,	
 	}
 }
 
@@ -138,8 +138,8 @@ func LoadServerConfig() *ServerConfig {
 		log.Fatalf("err while parsing run mode")
 	}
 	return &ServerConfig {
-		Server_Address: serverAddr, 
-		Server_Port: serverPort,
+		ServerAddress: serverAddr, 
+		ServerPort: serverPort,
 		Timeout: timeoutTime, 
 		IdleTimeout: idleTimeoutTime,  	
 		ServerRunMode: serverRunMode,
