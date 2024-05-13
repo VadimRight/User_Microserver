@@ -19,12 +19,12 @@ func main() {
 	)
 	logPretty.Info(
 		"this is log",
-		slog.String("Postgres Name", cfg.Postgres.Database_Name),
-		slog.String("Postgres Port", cfg.Postgres.Postgres_Port),
-		slog.String("Postgres Host", cfg.Postgres.Postgres_Host),
-		slog.String("Postgres User", cfg.Postgres.Postgres_User),
-		slog.String("Server Port", cfg.Server.Server_Port),
-		slog.String("Server_Address", cfg.Server.Server_Address),
+		slog.String("Postgres Name", cfg.Postgres.DatabaseName),
+		slog.String("Postgres Port", cfg.Postgres.PostgresPort),
+		slog.String("Postgres Host", cfg.Postgres.PostgresHost),
+		slog.String("Postgres User", cfg.Postgres.PostgresUser),
+		slog.String("Server Port", cfg.Server.ServerPort),
+		slog.String("Server_Address", cfg.Server.ServerAddress),
 		slog.Duration("Timeout", cfg.Server.Timeout),
 		slog.Duration("Idle Timeout", cfg.Server.IdleTimeout),
 	)
