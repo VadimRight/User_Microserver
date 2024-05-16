@@ -7,7 +7,6 @@ import (
 	"github.com/VadimRight/User_Microserver/pkg/prettylogger/handler/slogpretty"
 )
 
-
 const (
 	envLocal = "local"
 	envDev   = "dev"
@@ -35,7 +34,6 @@ func SetupPrettyLogger(env string) *slog.Logger {
 	return log
 }
 
-
 func setupPrettySlog() *slog.Logger {
 	opts := slogpretty.PrettyHandlerOptions{
 		SlogOpts: &slog.HandlerOptions{
@@ -47,3 +45,4 @@ func setupPrettySlog() *slog.Logger {
 
 	return slog.New(handler)
 }
+
