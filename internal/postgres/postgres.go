@@ -18,7 +18,7 @@ var postgresCfg = config.LoadPostgresConfig()
 var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",postgresCfg.PostgresHost, postgresCfg.PostgresPort, postgresCfg.PostgresUser, postgresCfg.PostgresPassword, postgresCfg.DatabaseName)	
 
 
-func InitPostgresDatabase() *PostgresStorage {
+func InitPostgresDatabase()  {
 	const op = "postgres.InitPostgresDatabase"
 	db, err := sql.Open("postgres", postgresUrl)
 	if err != nil {
@@ -42,7 +42,6 @@ func InitPostgresDatabase() *PostgresStorage {
 		log.Fatalf("%s: %v", op, err)
 	}
 	defer db.Close()
-	return &PostgresStorage{db: db}
 }
 
 func SaveNewUser(username, email, password string) {
