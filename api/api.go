@@ -8,10 +8,11 @@ import (
 )
 
 func InitServer(cfg *config.Config) {
+	const opt = "api.InitServer"
 	gin.SetMode(cfg.Server.RunMode)
 	r := gin.New()
 	err := r.Run(fmt.Sprintf(":%s", cfg.Server.ServerPort))
 	if err != nil {
-		log.Fatalf("Server is not starting %v", err)
+		log.Fatalf("%s: %v", opt, err)
 	}	
 }

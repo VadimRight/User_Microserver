@@ -65,9 +65,10 @@ func LoadConfig() *Config {
 }
 
 func LoadEnvConfig() *EnvConfig {
+	const opt = "internal.config.LoadEnvConfig"
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("err loading: %v", err)
+		log.Fatalf("%s %v", opt, err)
 	}		
 
 	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
@@ -91,9 +92,10 @@ func LoadEnvConfig() *EnvConfig {
 }
 
 func LoadPostgresConfig() *PostgresConfig {
+	const opt = "internal.config.LoadPostgresConfig"
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("err loading postgres env: %v", err)
+		log.Fatalf("%s: %v", opt, err)
 	}
 	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
 	
@@ -123,8 +125,9 @@ func LoadPostgresConfig() *PostgresConfig {
 
 func LoadServerConfig() *ServerConfig {
 	err := godotenv.Load()
+	const opt = "internal.config.LoadPostgresConfig"
 	if err != nil {
-		log.Fatalf("err while loading server env: %v", err)
+		log.Fatalf("%s: %v", opt, err)
 	}
 	log := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
 	
