@@ -44,7 +44,7 @@ func InitPostgresDatabase()  {
 	defer db.Close()
 }
 
-func SaveNewUser(username, email, password string) {
+func RegisterUser(username, email, password string) {
 	const op = "postgres.SaveNewUser"
 	db, err := sql.Open("postgres", postgresUrl)
 	if err != nil {
