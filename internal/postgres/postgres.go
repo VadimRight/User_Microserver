@@ -18,7 +18,7 @@ var postgresCfg = config.LoadPostgresConfig()
 var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",postgresCfg.PostgresHost, postgresCfg.PostgresPort, postgresCfg.PostgresUser, postgresCfg.PostgresPassword, postgresCfg.DatabaseName)	
 
 
-func InitPostgresDatabase() *PostgresStorage {
+func InitPostgresDatabase()  {
 	const op = "postgres.InitPostgresDatabase"
 	db, err := sql.Open("postgres", postgresUrl)
 	if err != nil {
@@ -42,7 +42,6 @@ func InitPostgresDatabase() *PostgresStorage {
 		log.Fatalf("%s: %v", op, err)
 	}
 	defer db.Close()
-	return &PostgresStorage{db: db}
 }
 
 func SaveNewUser(username, email, password string) {
@@ -67,5 +66,25 @@ func SaveNewUser(username, email, password string) {
 	_, err = res.LastInsertId()
 	if err != nil {
 		log.Fatalf("%s failed to get last inserted id: %v", op, err)
+	}
+}
+
+func GetUser(username string) {
+	const op = "postgres.GetUser"
+	db, err := sql.Open("postgres", postgresUrl)
+	if err != nil {
+		log.Fatalf("%s: %v", op, err)
+	}
+	getUser, err := db.Prepare(`
+		SELECT id, username, email, is_verified, is_activate FROM "user" WHERE id = ?;
+	`)
+	if err != nil {
+		log.Fatalf("%s: %v", op, err)
+	}
+	_, err = getUser.Exec(username)
+	if err != nil {
+		if postgresErr, ok := err.(*pq.Error); ok {
+    			fmt.Println("pq error:", postgresErr.Code.Name())
+		}				
 	}
 }

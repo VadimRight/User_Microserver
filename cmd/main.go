@@ -9,6 +9,6 @@ import (
 
 func main() {
 	cfg := config.LoadConfig()
-	_ = postgres.InitPostgresDatabase()
+	postgres.InitPostgresDatabase()
 	api.InitServer(cfg)
 }
