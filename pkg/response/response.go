@@ -29,5 +29,5 @@ func Error(msg string) Responce {
 }
 
 func ErrorValidation(errs validator.ValidationErrors) {
-	
+			
 }
