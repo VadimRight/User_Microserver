@@ -14,10 +14,9 @@ type PostgresStorage struct {
 	db *sql.DB
 }
 
-func InitPostgresDatabase() {
+func InitPostgresDatabase(cfg config.Config) PostgresStorage {
 	const op = "postgres.InitPostgresDatabase"
-	var postgresCfg = config.LoadPostgresConfig()
-	var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", postgresCfg.PostgresHost, postgresCfg.PostgresPort, postgresCfg.PostgresUser, postgresCfg.PostgresPassword, postgresCfg.DatabaseName)
+	var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", cfg.Postgres.PostgresHost, cfg.Postgres.PostgresPort, cfg.Postgres.PostgresUser, cfg.Postgres.PostgresPassword, cfg.Postgres.DatabaseName)
 	db, err := sql.Open("postgres", postgresUrl)
 	if err != nil {
 		log.Fatalf("Error while connecting to postgres database: %v", err)
@@ -39,7 +38,12 @@ func InitPostgresDatabase() {
 	if err != nil {
 		log.Fatalf("%s: %v", op, err)
 	}
-	defer db.Close()
+	return PostgresStorage{db: db}
+}
+
+// ClosePostgres закрывает соединение с базой данных
+func (s *PostgresStorage) ClosePostgres() error {
+	return s.db.Close()
 }
 
 func RegisterUser(username, email, password string) {
