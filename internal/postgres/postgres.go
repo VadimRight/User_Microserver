@@ -14,15 +14,13 @@ type PostgresStorage struct {
 	db *sql.DB
 }
 
-var postgresCfg = config.LoadPostgresConfig()
-var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",postgresCfg.PostgresHost, postgresCfg.PostgresPort, postgresCfg.PostgresUser, postgresCfg.PostgresPassword, postgresCfg.DatabaseName)	
-
-
-func InitPostgresDatabase()  {
+func InitPostgresDatabase() {
 	const op = "postgres.InitPostgresDatabase"
+	var postgresCfg = config.LoadPostgresConfig()
+	var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", postgresCfg.PostgresHost, postgresCfg.PostgresPort, postgresCfg.PostgresUser, postgresCfg.PostgresPassword, postgresCfg.DatabaseName)
 	db, err := sql.Open("postgres", postgresUrl)
 	if err != nil {
-		log.Fatalf("Error while connecting to postgres database: %v", err)	
+		log.Fatalf("Error while connecting to postgres database: %v", err)
 	}
 
 	createDatabase, err := db.Prepare(`
@@ -45,6 +43,8 @@ func InitPostgresDatabase()  {
 }
 
 func RegisterUser(username, email, password string) {
+	var postgresCfg = config.LoadPostgresConfig()
+	var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", postgresCfg.PostgresHost, postgresCfg.PostgresPort, postgresCfg.PostgresUser, postgresCfg.PostgresPassword, postgresCfg.DatabaseName)
 	const op = "postgres.SaveNewUser"
 	db, err := sql.Open("postgres", postgresUrl)
 	if err != nil {
@@ -60,8 +60,8 @@ func RegisterUser(username, email, password string) {
 	res, err := createNewUser.Exec(uuidUserId, username, email, password)
 	if err != nil {
 		if postgresErr, ok := err.(*pq.Error); ok {
-    			fmt.Println("pq error:", postgresErr.Code.Name())
-		}				
+			fmt.Println("pq error:", postgresErr.Code.Name())
+		}
 	}
 	_, err = res.LastInsertId()
 	if err != nil {
@@ -70,6 +70,8 @@ func RegisterUser(username, email, password string) {
 }
 
 func GetUser(username string) {
+	var postgresCfg = config.LoadPostgresConfig()
+	var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", postgresCfg.PostgresHost, postgresCfg.PostgresPort, postgresCfg.PostgresUser, postgresCfg.PostgresPassword, postgresCfg.DatabaseName)
 	const op = "postgres.GetUser"
 	db, err := sql.Open("postgres", postgresUrl)
 	if err != nil {
@@ -84,7 +86,7 @@ func GetUser(username string) {
 	_, err = getUser.Exec(username)
 	if err != nil {
 		if postgresErr, ok := err.(*pq.Error); ok {
-    			fmt.Println("pq error:", postgresErr.Code.Name())
-		}				
+			fmt.Println("pq error:", postgresErr.Code.Name())
+		}
 	}
 }
