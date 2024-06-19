@@ -12,6 +12,11 @@ type PostgresStorage struct {
 	Db *sql.DB
 }
 
+// Newpostgres.PostgresStorage возвращает объект PostgresStorage
+func NewPostgresStorage(db *sql.DB) *PostgresStorage {
+	return &PostgresStorage{Db: db}
+}
+
 func InitPostgresDatabase(cfg config.Config) PostgresStorage {
 	const op = "postgres.InitPostgresDatabase"
 	var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", cfg.Postgres.PostgresHost, cfg.Postgres.PostgresPort, cfg.Postgres.PostgresUser, cfg.Postgres.PostgresPassword, cfg.Postgres.DatabaseName)
@@ -42,9 +47,4 @@ func InitPostgresDatabase(cfg config.Config) PostgresStorage {
 // ClosePostgres закрывает соединение с базой данных
 func (s *PostgresStorage) ClosePostgres() error {
 	return s.Db.Close()
-}
-
-// Newpostgres.PostgresStorage возвращает объект PostgresStorage
-func NewPostgresStorage(db *sql.DB) *PostgresStorage {
-	return &PostgresStorage{Db: db}
 }
