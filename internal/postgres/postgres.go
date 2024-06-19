@@ -9,7 +9,7 @@ import (
 )
 
 type PostgresStorage struct {
-	db *sql.DB
+	Db *sql.DB
 }
 
 func InitPostgresDatabase(cfg config.Config) PostgresStorage {
@@ -36,15 +36,15 @@ func InitPostgresDatabase(cfg config.Config) PostgresStorage {
 	if err != nil {
 		log.Fatalf("%s: %v", op, err)
 	}
-	return PostgresStorage{db: db}
+	return PostgresStorage{Db: db}
 }
 
 // ClosePostgres закрывает соединение с базой данных
 func (s *PostgresStorage) ClosePostgres() error {
-	return s.db.Close()
+	return s.Db.Close()
 }
 
 // Newpostgres.PostgresStorage возвращает объект PostgresStorage
 func NewPostgresStorage(db *sql.DB) *PostgresStorage {
-	return &PostgresStorage{db: db}
+	return &PostgresStorage{Db: db}
 }
