@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/VadimRight/User_Microserver/internal/config"
+	_ "github.com/lib/pq"
 )
 
 type PostgresStorage struct {
@@ -17,6 +18,7 @@ func NewPostgresStorage(db *sql.DB) *PostgresStorage {
 	return &PostgresStorage{Db: db}
 }
 
+// Migration with sql query
 func InitPostgresDatabase(cfg config.Config) PostgresStorage {
 	const op = "postgres.InitPostgresDatabase"
 	var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", cfg.Postgres.PostgresHost, cfg.Postgres.PostgresPort, cfg.Postgres.PostgresUser, cfg.Postgres.PostgresPassword, cfg.Postgres.DatabaseName)
