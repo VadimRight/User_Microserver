@@ -3,11 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
-	"log"
 
 	"github.com/VadimRight/User_Microserver/domain/entity"
-	"github.com/VadimRight/User_Microserver/internal/config"
 	"github.com/google/uuid"
 )
 
@@ -18,38 +15,6 @@ type UserRepository struct {
 // Newpostgres.UserRepository возвращает объект PostgresStorage
 func NewUserRepository(db *sql.DB) *UserRepository {
 	return &UserRepository{Db: db}
-}
-
-func InitPostgresDatabase(cfg config.Config) UserRepository {
-	const op = "postgres.InitPostgresDatabase"
-	var postgresUrl = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", cfg.Postgres.PostgresHost, cfg.Postgres.PostgresPort, cfg.Postgres.PostgresUser, cfg.Postgres.PostgresPassword, cfg.Postgres.DatabaseName)
-	db, err := sql.Open("postgres", postgresUrl)
-	if err != nil {
-		log.Fatalf("Error while connecting to postgres database: %v", err)
-	}
-
-	createDatabase, err := db.Prepare(`
-	CREATE TABLE IF NOT EXISTS "user" (
-		id UUID PRIMARY KEY,
-		username VARCHAR(20) NOT NULL UNIQUE,
-		email VARCHAR(20) NOT NULL UNIQUE,
-		password CHAR(60) NOT NULL UNIQUE,
-		is_verified BOOL NOT NULL DEFAULT false,
-		is_activate BOOL NOT NULL DEFAULT false
-	);`)
-	if err != nil {
-		log.Fatalf("%s: %v", op, err)
-	}
-	_, err = createDatabase.Exec()
-	if err != nil {
-		log.Fatalf("%s: %v", op, err)
-	}
-	return UserRepository{Db: db}
-}
-
-// ClosePostgres закрывает соединение с базой данных
-func (s *UserRepository) ClosePostgres() error {
-	return s.Db.Close()
 }
 
 // GetUserByUsername возвращает пользователя по его имени
