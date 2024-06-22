@@ -13,6 +13,3 @@ type User struct {
 	IsVerified bool
 	IsActive   bool
 }
-
-type User interface {
-}
