@@ -2,12 +2,10 @@ package entity
 
 import (
 	"context"
-
-	"github.com/google/uuid"
 )
 
 type User struct {
-	Id         uuid.UUID
+	Id         string
 	Username   string
 	Email      string
 	Password   string
@@ -26,7 +24,7 @@ type UserGeter interface {
 }
 
 func (u User) GetId() string {
-	return u.Id.String()
+	return u.Id
 }
 
 func (u User) GetName() string {
