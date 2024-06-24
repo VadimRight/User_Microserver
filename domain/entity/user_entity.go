@@ -4,13 +4,12 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/jordan-wright/email"
 )
 
 type User struct {
 	Id         uuid.UUID
 	Username   string
-	Email      email.Email
+	Email      string
 	Password   string
 	IsVerified bool
 	IsActive   bool
@@ -34,6 +33,6 @@ func (u User) GetName() string {
 	return u.Username
 }
 
-func (u User) GetEmail() email.Email {
+func (u User) GetEmail() string {
 	return u.Email
 }
