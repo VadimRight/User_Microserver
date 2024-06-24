@@ -25,3 +25,15 @@ type UserGeter interface {
 	GetUserByUsername(ctx context.Context, username string) (User, error)
 	GetUserByID(ctx context.Context, userID string) (User, error)
 }
+
+func (u User) GetId() string {
+	return u.Id.String()
+}
+
+func (u User) GetName() string {
+	return u.Username
+}
+
+func (u User) GetEmail() email.Email {
+	return u.Email
+}
