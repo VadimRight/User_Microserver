@@ -5,7 +5,6 @@ import (
 	"database/sql"
 
 	"github.com/VadimRight/User_Microserver/domain/entity"
-	"github.com/google/uuid"
 )
 
 type UserRepository struct {
@@ -28,8 +27,7 @@ func (s UserRepository) GetUserByUsername(ctx context.Context, username string) 
 }
 
 // UserCreate создает нового пользователя
-func (s UserRepository) UserCreate(ctx context.Context, username string, password string) (entity.User, error) {
-	id := uuid.New()
+func (s UserRepository) UserCreate(ctx context.Context, id string, username string, password string) (entity.User, error) {
 	_, err := s.Db.ExecContext(ctx, "INSERT INTO users (id, username, password) VALUES ($1, $2, $3)", id, username, password)
 	if err != nil {
 		return entity.User{}, err
