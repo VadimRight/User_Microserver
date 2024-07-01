@@ -32,12 +32,6 @@ func NewAuthService() AuthService {
 	return AuthService{}
 }
 
-// AuthService интерфейс для работы с JWT
-type TokenVaditor interface {
-	GenerateToken(ctx context.Context, userID string) (string, error)
-	ValidateToken(ctx context.Context, token string) (*jwt.Token, error)
-}
-
 func (s *AuthService) GenerateToken(ctx context.Context, userId string) (string, error) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, &JwtCustomClaim{
 		Id: userId,
