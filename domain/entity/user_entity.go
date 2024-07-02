@@ -1,7 +1,7 @@
 package entity
 
 type User struct {
-	Id         string
+	Id         Uuid
 	Username   string
 	Email      string
 	Password   string
@@ -9,7 +9,7 @@ type User struct {
 	IsActive   bool
 }
 
-func (u User) GetId() string {
+func (u User) GetId() Uuid {
 	return u.Id
 }
 

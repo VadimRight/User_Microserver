@@ -27,7 +27,7 @@ func (s UserRepository) SelectUserByUsername(ctx context.Context, username strin
 }
 
 // UserCreate создает нового пользователя
-func (s UserRepository) InsertUser(ctx context.Context, id string, username string, password string) (entity.User, error) {
+func (s UserRepository) InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error) {
 	_, err := s.Db.ExecContext(ctx, "INSERT INTO users (id, username, password) VALUES ($1, $2, $3)", id, username, password)
 	if err != nil {
 		return entity.User{}, err
