@@ -1,6 +1,9 @@
 package usecase
 
 import (
+	"context"
+
+	"github.com/VadimRight/User_Microserver/domain/entity"
 	"github.com/VadimRight/User_Microserver/internal/config"
 	"github.com/VadimRight/User_Microserver/internal/repository"
 )
@@ -10,5 +13,6 @@ type userUsecase struct {
 	cfg  config.Config
 }
 
-func (u *userUsecase) Register() {
+type UserRepositoryInserter interface {
+	InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error)
 }
