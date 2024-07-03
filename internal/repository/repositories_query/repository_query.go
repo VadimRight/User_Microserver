@@ -1,5 +1,8 @@
 package repositories_query
 
 var (
-	InsertUser string
+	GetUserByUsername string
+	InsertUser        string
+	GetUserByID       string
+	GetAllUsers       string
 )
