@@ -13,6 +13,9 @@ type userUsecase struct {
 	cfg  config.Config
 }
 
-type UserRepositoryInserter interface {
+type UserRepositoryRegister interface {
 	InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error)
+}
+
+func (u *userUsecase) RegisterUser(user UserRepositoryRegister) {
 }
