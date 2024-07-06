@@ -7,17 +7,17 @@ import (
 	"github.com/VadimRight/User_Microserver/domain/entity"
 )
 
-type UserRepository struct {
+type userRepository struct {
 	Db *sql.DB
 }
 
-// Newpostgres.UserRepository возвращает объект PostgresStorage
-func NewUserRepository(db *sql.DB) *UserRepository {
-	return &UserRepository{Db: db}
+// Newpostgres.userRepository возвращает объект PostgresStorage
+func NewuserRepository(db *sql.DB) *userRepository {
+	return &userRepository{Db: db}
 }
 
 // GetUserByUsername возвращает пользователя по его имени
-func (s UserRepository) GetUserByUsername(ctx context.Context, username string) (entity.User, error) {
+func (s userRepository) GetUserByUsername(ctx context.Context, username string) (entity.User, error) {
 	var user entity.User
 	err := s.Db.QueryRowContext(ctx, "SELECT id, username, password FROM users WHERE username=$1", username).Scan(&user.Id, &user.Username, &user.Password)
 	if err != nil {
@@ -27,7 +27,7 @@ func (s UserRepository) GetUserByUsername(ctx context.Context, username string) 
 }
 
 // UserCreate создает нового пользователя
-func (s UserRepository) InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error) {
+func (s userRepository) InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error) {
 	_, err := s.Db.ExecContext(ctx, "INSERT INTO users (id, username, password) VALUES ($1, $2, $3)", id, username, password)
 	if err != nil {
 		return entity.User{}, err
@@ -36,7 +36,7 @@ func (s UserRepository) InsertUser(ctx context.Context, id entity.Uuid, username
 }
 
 // GetUserByID возвращает пользователя по его ID
-func (s UserRepository) GetUserByID(ctx context.Context, userID string) (entity.User, error) {
+func (s userRepository) GetUserByID(ctx context.Context, userID string) (entity.User, error) {
 	var user entity.User
 	err := s.Db.QueryRowContext(ctx, "SELECT id, username FROM users WHERE id=$1", userID).Scan(&user.Id, &user.Username)
 	if err != nil {
@@ -46,7 +46,7 @@ func (s UserRepository) GetUserByID(ctx context.Context, userID string) (entity.
 }
 
 // GetAllUsers возвращает всех пользователей
-func (s UserRepository) GetAllUsers(ctx context.Context) ([]entity.User, error) {
+func (s userRepository) GetAllUsers(ctx context.Context) ([]entity.User, error) {
 	rows, err := s.Db.QueryContext(ctx, "SELECT id, username FROM users")
 	if err != nil {
 		return nil, err
