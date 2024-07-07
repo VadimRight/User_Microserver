@@ -3,13 +3,13 @@ package usecase
 import (
 	"context"
 
+	"github.com/VadimRight/User_Microserver/domain"
 	"github.com/VadimRight/User_Microserver/domain/entity"
 	"github.com/VadimRight/User_Microserver/internal/config"
-	"github.com/VadimRight/User_Microserver/internal/repository"
 )
 
 type userUsecase struct {
-	repo repository.UserRepository
+	repo domain.Repository
 	cfg  config.Config
 }
 
