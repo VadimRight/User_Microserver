@@ -4,62 +4,100 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/VadimRight/User_Microserver/domain"
 	"github.com/VadimRight/User_Microserver/domain/entity"
+	"github.com/VadimRight/User_Microserver/internal/repository/repositories_query"
+	"github.com/VadimRight/User_Microserver/pkg/datasource"
+	"github.com/VadimRight/User_Microserver/pkg/utils"
+	"github.com/jmoiron/sqlx"
 )
 
-type userRepository struct {
-	Db *sql.DB
+type repository struct {
+	db   *sqlx.DB
+	conn datasource.ConnTx
 }
 
-// Newpostgres.userRepository возвращает объект PostgresStorage
-func NewuserRepository(db *sql.DB) *userRepository {
-	return &userRepository{Db: db}
+func NewRepository(c *sqlx.DB) domain.Repository {
+	return &repository{conn: c, db: c}
 }
 
-// GetUserByUsername возвращает пользователя по его имени
-func (s *userRepository) GetUserByUsername(ctx context.Context, username string) (entity.User, error) {
-	var user entity.User
-	err := s.Db.QueryRowContext(ctx, "SELECT id, username, password FROM users WHERE username=$1", username).Scan(&user.Id, &user.Username, &user.Password)
+// Atomic implements Repository Interface for transaction query
+func (r *repository) Atomic(ctx context.Context, opt *sql.TxOptions, repo func(tx users.Repository) error) error {
+	txConn, err := r.db.BeginTxx(ctx, opt)
 	if err != nil {
-		return entity.User{}, err
+		return err
 	}
-	return user, nil
+
+	newRepository := &repository{conn: txConn, db: r.db}
+
+	repo(newRepository)
+
+	if err := new(datasource.DataSource).EndTx(txConn, err); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-// UserCreate создает нового пользователя
-func (s *userRepository) InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error) {
-	_, err := s.Db.ExecContext(ctx, "INSERT INTO users (id, username, password) VALUES ($1, $2, $3)", id, username, password)
-	if err != nil {
-		return entity.User{}, err
+func (repo *repository) InsertUser(ctx context.Context, user entity.User) (userID int64, err error) {
+	args := utils.Array{
+		user.Email,
+		user.Username,
+		user.Password,
+		user.IsActive,
+		user.IsVerified,
 	}
-	return entity.User{Id: id, Username: username}, nil
+
+	err = new(datasource.DataSource).ExecSQL(repo.conn.ExecContext(ctx, repositories_query.InsertUser, args...)).Scan(nil, &userID)
+	if err != nil {
+		return userID, err
+	}
+
+	return userID, nil
 }
 
-// GetUserByID возвращает пользователя по его ID
-func (s *userRepository) GetUserByID(ctx context.Context, userID string) (entity.User, error) {
-	var user entity.User
-	err := s.Db.QueryRowContext(ctx, "SELECT id, username FROM users WHERE id=$1", userID).Scan(&user.Id, &user.Username)
-	if err != nil {
-		return entity.User{}, err
+func (repo *repository) GetUserByID(ctx context.Context, userID int64, options ...entities.LockingOpt) (userData entity.User, err error) {
+	args := utils.Array{
+		userID,
 	}
-	return user, nil
-}
 
-// GetAllUsers возвращает всех пользователей
-func (s *userRepository) GetAllUsers(ctx context.Context) ([]entity.User, error) {
-	rows, err := s.Db.QueryContext(ctx, "SELECT id, username FROM users")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var users []entity.User
-	for rows.Next() {
-		var user entity.User
-		if err := rows.Scan(user.Id, user.Username); err != nil {
-			return nil, err
+	row := func(idx int) utils.Array {
+		return utils.Array{
+			&userData.Id,
+			&userData.Email,
+			&userData.Username,
+			&userData.IsActive,
+			&userData.IsVerified,
 		}
-		users = append(users, user)
 	}
-	return users, nil
+
+	query := repositories_query.GetUserByID
+
+	if len(options) >= 1 && options[0].PessimisticLocking {
+		query += " FOR UPDATE"
+	}
+
+	if err = new(datasource.DataSource).QuerySQL(repo.conn.QueryxContext(ctx, query, args...)).Scan(row); err != nil {
+		return userData, err
+	}
+
+	return userData, err
+}
+
+func (repo *repository) IsUserExist(ctx context.Context, email string) bool {
+	args := utils.Array{email}
+
+	var id int64
+	row := func(idx int) utils.Array {
+		return utils.Array{
+			&id,
+		}
+	}
+
+	err := new(datasource.DataSource).QuerySQL(repo.conn.QueryxContext(ctx, repositories_query.IsUserExist, args...)).Scan(row)
+	if err != nil {
+		return false
+	}
+
+	return id != 0
 }
