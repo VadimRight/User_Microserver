@@ -3,101 +3,73 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"os"
 
 	"github.com/VadimRight/User_Microserver/domain"
 	"github.com/VadimRight/User_Microserver/domain/entity"
-	"github.com/VadimRight/User_Microserver/internal/repository/repositories_query"
-	"github.com/VadimRight/User_Microserver/pkg/datasource"
-	"github.com/VadimRight/User_Microserver/pkg/utils"
-	"github.com/jmoiron/sqlx"
 )
 
-type repository struct {
-	db   *sqlx.DB
-	conn datasource.ConnTx
+type userRepository struct {
+	Db *sql.DB
 }
 
-func NewRepository(c *sqlx.DB) domain.Repository {
-	return &repository{conn: c, db: c}
+// Newpostgres.userRepository возвращает объект PostgresStorage
+func NewUserRepository(db *sql.DB) domain.Repository {
+	return &userRepository{Db: db}
 }
 
-// Atomic implements Repository Interface for transaction query
-func (r *repository) Atomic(ctx context.Context, opt *sql.TxOptions, repo func(tx domain.Repository) error) error {
-	txConn, err := r.db.BeginTxx(ctx, opt)
+// GetUserByUsername возвращает пользователя по его имени
+func (s *userRepository) GetUserByUsername(ctx context.Context, username string) (entity.User, error) {
+	var user entity.User
+	data, err := os.ReadFile("../internal/repository/repositories_query/select_by_name.sql")
+	query := string(data)
+	err = s.Db.QueryRowContext(ctx, query, username).Scan(&user.Id, &user.Username, &user.Password)
 	if err != nil {
-		return err
+		return entity.User{}, err
 	}
-
-	newRepository := &repository{conn: txConn, db: r.db}
-
-	repo(newRepository)
-
-	if err := new(datasource.DataSource).EndTx(txConn, err); err != nil {
-		return err
-	}
-
-	return nil
+	return user, nil
 }
 
-func (repo *repository) InsertUser(ctx context.Context, user entity.User) (userID int64, err error) {
-	args := utils.Array{
-		user.Email,
-		user.Username,
-		user.Password,
-		user.IsActive,
-		user.IsVerified,
-	}
-
-	err = new(datasource.DataSource).ExecSQL(repo.conn.ExecContext(ctx, repositories_query.InsertUser, args...)).Scan(nil, &userID)
+// UserCreate создает нового пользователя
+func (s *userRepository) InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error) {
+	data, err := os.ReadFile("../internal/repository/repositories_query/insert.sql")
+	query := string(data)
+	_, err = s.Db.ExecContext(ctx, query, id, username, password)
 	if err != nil {
-		return userID, err
+		return entity.User{}, err
 	}
-
-	return userID, nil
+	return entity.User{Id: id, Username: username}, nil
 }
 
-func (repo *repository) GetUserByID(ctx context.Context, userID int64, options ...entities.LockingOpt) (userData entity.User, err error) {
-	args := utils.Array{
-		userID,
+// GetUserByID возвращает пользователя по его ID
+func (s *userRepository) GetUserByID(ctx context.Context, userID string) (entity.User, error) {
+	var user entity.User
+	data, err := os.ReadFile("../internal/repository/repositories_query/select.sql")
+	query := string(data)
+	err = s.Db.QueryRowContext(ctx, query, userID).Scan(&user.Id, &user.Username)
+	if err != nil {
+		return entity.User{}, err
 	}
+	return user, nil
+}
 
-	row := func(idx int) utils.Array {
-		return utils.Array{
-			&userData.Id,
-			&userData.Email,
-			&userData.Username,
-			&userData.IsActive,
-			&userData.IsVerified,
+// GetAllUsers возвращает всех пользователей
+func (s *userRepository) GetAllUsers(ctx context.Context) ([]entity.User, error) {
+	data, err := os.ReadFile("../internal/repository/repositories_query/select.sql")
+	query := string(data)
+	rows, err := s.Db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []entity.User
+	for rows.Next() {
+		var user entity.User
+		if err := rows.Scan(user.Id, user.Username); err != nil {
+			return nil, err
 		}
+		users = append(users, user)
 	}
-
-	query := repositories_query.GetUserByID
-
-	if len(options) >= 1 && options[0].PessimisticLocking {
-		query += " FOR UPDATE"
-	}
-
-	if err = new(datasource.DataSource).QuerySQL(repo.conn.QueryxContext(ctx, query, args...)).Scan(row); err != nil {
-		return userData, err
-	}
-
-	return userData, err
-}
-
-func (repo *repository) IsUserExist(ctx context.Context, email string) bool {
-	args := utils.Array{email}
-
-	var id int64
-	row := func(idx int) utils.Array {
-		return utils.Array{
-			&id,
-		}
-	}
-
-	err := new(datasource.DataSource).QuerySQL(repo.conn.QueryxContext(ctx, repositories_query.IsUserExist, args...)).Scan(row)
-	if err != nil {
-		return false
-	}
-
-	return id != 0
+	return users, nil
 }
