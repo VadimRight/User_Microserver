@@ -13,6 +13,6 @@ var (
 	GetUserByID string
 	// go:embed repositories_query/select_all.sql
 	GetAllUsers string
-	// go:embed repositories_query/
+	// go:embed repositories_query/check_if_user_exists.sql
 	IsUserExist string
 )

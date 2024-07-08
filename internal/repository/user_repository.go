@@ -22,7 +22,7 @@ func NewRepository(c *sqlx.DB) domain.Repository {
 }
 
 // Atomic implements Repository Interface for transaction query
-func (r *repository) Atomic(ctx context.Context, opt *sql.TxOptions, repo func(tx users.Repository) error) error {
+func (r *repository) Atomic(ctx context.Context, opt *sql.TxOptions, repo func(tx domain.Repository) error) error {
 	txConn, err := r.db.BeginTxx(ctx, opt)
 	if err != nil {
 		return err
