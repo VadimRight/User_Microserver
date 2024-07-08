@@ -3,7 +3,9 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"os"
 
+	"github.com/VadimRight/User_Microserver/domain"
 	"github.com/VadimRight/User_Microserver/domain/entity"
 )
 
@@ -12,14 +14,16 @@ type userRepository struct {
 }
 
 // Newpostgres.userRepository возвращает объект PostgresStorage
-func NewuserRepository(db *sql.DB) *userRepository {
+func NewUserRepository(db *sql.DB) domain.Repository {
 	return &userRepository{Db: db}
 }
 
 // GetUserByUsername возвращает пользователя по его имени
 func (s *userRepository) GetUserByUsername(ctx context.Context, username string) (entity.User, error) {
 	var user entity.User
-	err := s.Db.QueryRowContext(ctx, "SELECT id, username, password FROM users WHERE username=$1", username).Scan(&user.Id, &user.Username, &user.Password)
+	data, err := os.ReadFile("../internal/repository/repositories_query/select_by_name.sql")
+	query := string(data)
+	err = s.Db.QueryRowContext(ctx, query, username).Scan(&user.Id, &user.Username, &user.Password)
 	if err != nil {
 		return entity.User{}, err
 	}
@@ -28,7 +32,9 @@ func (s *userRepository) GetUserByUsername(ctx context.Context, username string)
 
 // UserCreate создает нового пользователя
 func (s *userRepository) InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error) {
-	_, err := s.Db.ExecContext(ctx, "INSERT INTO users (id, username, password) VALUES ($1, $2, $3)", id, username, password)
+	data, err := os.ReadFile("../internal/repository/repositories_query/insert.sql")
+	query := string(data)
+	_, err = s.Db.ExecContext(ctx, query, id, username, password)
 	if err != nil {
 		return entity.User{}, err
 	}
@@ -38,7 +44,9 @@ func (s *userRepository) InsertUser(ctx context.Context, id entity.Uuid, usernam
 // GetUserByID возвращает пользователя по его ID
 func (s *userRepository) GetUserByID(ctx context.Context, userID string) (entity.User, error) {
 	var user entity.User
-	err := s.Db.QueryRowContext(ctx, "SELECT id, username FROM users WHERE id=$1", userID).Scan(&user.Id, &user.Username)
+	data, err := os.ReadFile("../internal/repository/repositories_query/select.sql")
+	query := string(data)
+	err = s.Db.QueryRowContext(ctx, query, userID).Scan(&user.Id, &user.Username)
 	if err != nil {
 		return entity.User{}, err
 	}
@@ -47,7 +55,9 @@ func (s *userRepository) GetUserByID(ctx context.Context, userID string) (entity
 
 // GetAllUsers возвращает всех пользователей
 func (s *userRepository) GetAllUsers(ctx context.Context) ([]entity.User, error) {
-	rows, err := s.Db.QueryContext(ctx, "SELECT id, username FROM users")
+	data, err := os.ReadFile("../internal/repository/repositories_query/select.sql")
+	query := string(data)
+	rows, err := s.Db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
