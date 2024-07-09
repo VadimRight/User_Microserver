@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"os"
 
-	"github.com/VadimRight/User_Microserver/domain"
-	"github.com/VadimRight/User_Microserver/domain/entity"
+	"github.com/VadimRight/User_Microserver/internal/domain"
+	"github.com/VadimRight/User_Microserver/internal/domain/entity"
 )
 
 type userRepository struct {
