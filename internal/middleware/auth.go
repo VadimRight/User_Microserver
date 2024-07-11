@@ -67,8 +67,8 @@ func (a *AuthMiddleware) Handler() gin.HandlerFunc {
 }
 
 // Функция для получения значений из контекста
-func CtxValue(ctx context.Context) *service.JwtCustomClaim {
+func CtxValue(ctx context.Context) service.JwtCustomClaim {
 	// Извлекаем кастомные claims из контекста
-	raw, _ := ctx.Value(authString("auth")).(*service.JwtCustomClaim)
+	raw, _ := ctx.Value(authString("auth")).(service.JwtCustomClaim)
 	return raw
 }
