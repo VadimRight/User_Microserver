@@ -18,6 +18,17 @@ func NewUserRepository(db *sql.DB) domain.Repository {
 	return &userRepository{Db: db}
 }
 
+func (s *userRepository) IsUserExist(ctx context.Context, username string) bool {
+	check := true
+	data, err := os.ReadFile("../internal/repository/repositories_query/select_by_name.sql")
+	query := string(data)
+	if err != nil {
+		return false
+	}
+	err = s.Db.QueryRowContext(ctx, query, username).Scan(&check)
+	return check
+}
+
 // GetUserByUsername возвращает пользователя по его имени
 func (s *userRepository) GetUserByUsername(ctx context.Context, username string) (entity.User, error) {
 	var user entity.User
