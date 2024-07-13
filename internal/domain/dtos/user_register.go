@@ -14,7 +14,7 @@ type UserRegisterResponce struct {
 	Email    string `json:"email"`
 }
 
-func (cup UserRegisterRequest) Validate() error {
+func (cup UserRegisterRequest) ValidateUserRegisterRequest() error {
 	return validation.ValidateStruct(&cup,
 		validation.Field(&cup.Username, validation.Required),
 		validation.Field(&cup.Email, validation.Required),
