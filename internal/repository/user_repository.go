@@ -42,10 +42,10 @@ func (s *userRepository) GetUserByUsername(ctx context.Context, username string)
 }
 
 // UserCreate создает нового пользователя
-func (s *userRepository) InsertUser(ctx context.Context, id entity.Uuid, username string, password string) (entity.User, error) {
+func (s *userRepository) InsertUser(ctx context.Context, id entity.Uuid, username string, hashedPassword string) (entity.User, error) {
 	data, err := os.ReadFile("../internal/repository/repositories_query/insert.sql")
 	query := string(data)
-	_, err = s.Db.ExecContext(ctx, query, id, username, password)
+	_, err = s.Db.ExecContext(ctx, query, id, username, hashedPassword)
 	if err != nil {
 		return entity.User{}, err
 	}
