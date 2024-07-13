@@ -6,6 +6,7 @@ type Uuid struct {
 	Id uuid.UUID
 }
 
-func (u Uuid) GenerateNewId() string {
-	return uuid.New().String()
+func (u *Uuid) GenerateNewId() string {
+	u.Id = uuid.New()
+	return u.Id.String()
 }
