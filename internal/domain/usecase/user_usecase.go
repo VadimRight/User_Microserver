@@ -23,8 +23,10 @@ type UserRegisterRequestValidator interface {
 	ValidateUserRegisterRequest() error
 }
 
-func (u *userUsecase) RegisterUser(ctx context.Context, payload dtos.UserRegisterRequest) (userId int64, err error) {
+func (u *userUsecase) RegisterUser(ctx context.Context, payload dtos.UserRegisterRequest) (userId entity.Uuid, err error) {
 	if exists := u.repo.IsUserExist(ctx, payload.Username); exists {
 		return userId, errors.Conflict(errors.ErrUsernameAlreadyExists)
 	}
+	userId.GenerateNewId()
+	user, err = u.repo.InsertUser(ctx, payload.Username)
 }
