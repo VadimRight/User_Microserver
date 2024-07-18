@@ -7,6 +7,7 @@ import (
 	"github.com/VadimRight/User_Microserver/internal/domain"
 	"github.com/VadimRight/User_Microserver/internal/domain/dtos"
 	"github.com/VadimRight/User_Microserver/internal/domain/entity"
+	"github.com/VadimRight/User_Microserver/internal/domain/errors"
 )
 
 type userUsecase struct {
@@ -22,8 +23,10 @@ type UserRegisterRequestValidator interface {
 	ValidateUserRegisterRequest() error
 }
 
-func (u *userUsecase) RegisterUser(ctx context.Context, payload dtos.UserRegisterRequest) {
+func (u *userUsecase) RegisterUser(ctx context.Context, payload dtos.UserRegisterRequest) (userId entity.Uuid, err error) {
 	if exists := u.repo.IsUserExist(ctx, payload.Username); exists {
-
+		return userId, errors.Conflict(errors.ErrUsernameAlreadyExists)
 	}
+	userId.GenerateNewId()
+	user, err = u.repo.InsertUser(ctx, payload.Username)
 }

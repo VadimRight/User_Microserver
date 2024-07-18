@@ -7,5 +7,6 @@ type Uuid struct {
 }
 
 func (u Uuid) GenerateNewId() string {
-	return uuid.New().String()
+	u.Id = uuid.New()
+	return u.Id.String()
 }
