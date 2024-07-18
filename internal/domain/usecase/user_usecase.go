@@ -28,5 +28,6 @@ func (u *userUsecase) RegisterUser(ctx context.Context, payload dtos.UserRegiste
 		return userId, errors.Conflict(errors.ErrUsernameAlreadyExists)
 	}
 	userId.GenerateNewId()
-	user, err = u.repo.InsertUser(ctx, payload.Username)
+	user, err = u.repo.InsertUser(ctx, userId, payload.Username)
+	return userId, nil
 }
