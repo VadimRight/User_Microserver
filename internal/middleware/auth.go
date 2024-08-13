@@ -18,8 +18,8 @@ type AuthMiddleware struct {
 	authService service.AuthService
 }
 
-func NewAuthMiddleware(authService service.AuthService) *AuthMiddleware {
-	return &AuthMiddleware{authService: authService}
+func NewAuthMiddleware(authService service.AuthService) AuthMiddleware {
+	return AuthMiddleware{authService: authService}
 }
 
 // Middleware для аутентификации
